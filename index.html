@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helpdesk & Pelaporan Gangguan Alat MKG</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Sistem Pelaporan Gangguan Alat</h1>
+      <p>Unit Instrumentasi & Operasional MKG</p>
+    </header>
+
+    <section class="card">
+      <h2>Buat Tiket Laporan Baru</h2>
+      <form id="formLaporan">
+        <label>Nama Pelapor / Observer</label>
+        <input type="text" id="pelapor" placeholder="Contoh: Budi (Dinas Pagi)" required>
+
+        <label>Peralatan Operasional</label>
+        <select id="alat" required>
+          <option value="">-- Pilih Peralatan --</option>
+          <option value="AWS Taman Alat">AWS Taman Alat</option>
+          <option value="AAWS / ARG">AAWS / Penakar Hujan Otomatis (ARG)</option>
+          <option value="Server & Jaringan Komunikasi">Server & Jaringan Komunikasi</option>
+          <option value="Radar / Seismograf">Radar Cuaca / Seismograf</option>
+          <option value="Catu Daya / UPS / Genset">Catu Daya / UPS / Genset</option>
+        </select>
+
+        <label>Tingkat Urgensi</label>
+        <select id="urgensi" required>
+          <option value="Normal">Normal (Operasional masih berjalan)</option>
+          <option value="Tinggi">Tinggi (Data terhambat sebagian)</option>
+          <option value="Kritis">Kritis (Alat mati total / data terputus)</option>
+        </select>
+
+        <label>Deskripsi Gejala / Kerusakan</label>
+        <textarea id="deskripsi" rows="3" placeholder="Jelaskan kondisi alat, indikator lampu, atau pesan error..." required></textarea>
+
+        <button type="submit" id="btnSubmit">Kirim Laporan Gangguan</button>
+      </form>
+      <div id="notifikasi" class="hidden"></div>
+    </section>
+
+    <section class="card">
+      <div class="header-list">
+        <h2>Riwayat & Status Tiket Terkini</h2>
+        <button onclick="muatTiket()" class="btn-refresh">Refresh Data</button>
+      </div>
+      <div id="daftarTiket">Memuat data laporan...</div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
