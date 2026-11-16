@@ -1,9 +1,9 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylulehe73wBcoqGLuSxiR7OdLAn8JCE7PAOJpjWlHgQbsZhiEiZEt3SKmtXO_GIP4/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxma_ZJhWqxEuDsrVUZ3tcQKRYnDOU-PWcw5P1zM2BfRnQ45b2t2BqSvzOWGQ7dRE/exec";
 
 // Konfigurasi Bot Telegram & PIN Teknisi
-const TELEGRAM_BOT_TOKEN = "8895071679:AAHCntKQ8EOd04nRgXyty7PLyKurZtCnBJs"; 
-const TELEGRAM_CHAT_ID = "8350319262";   
-const PIN_TEKNISI = "1234"; // Ubah sesuai PIN yang Anda inginkan
+const TELEGRAM_BOT_TOKEN = "8895071679:AAHCntKQ8EOd04nRgXyty7PLyKurZtCnBJs";
+const TELEGRAM_CHAT_ID = "8350319262";
+const PIN_TEKNISI = "1234";
 
 const form = document.getElementById("formLaporan");
 const btnSubmit = document.getElementById("btnSubmit");
@@ -36,14 +36,14 @@ form.addEventListener("submit", async (e) => {
                     `Urgensi: *${payload.urgensi}*\n` +
                     `Pelapor: ${payload.pelapor}\n` +
                     `Kendala: ${payload.deskripsi}`;
-      
+
       await kirimTelegram(pesan);
     }
 
     notif.textContent = `Berhasil! Nomor Tiket Anda: ${result.tiket}. Notifikasi telah dikirim ke Telegram teknisi.`;
     notif.classList.remove("hidden");
     form.reset();
-    muatTiket(); 
+    muatTiket();
   } catch (err) {
     alert("Terjadi kesalahan saat mengirim laporan: " + err.message);
   } finally {
@@ -54,7 +54,7 @@ form.addEventListener("submit", async (e) => {
 
 async function tandaiSelesai(noTiket, namaAlat) {
   const inputPin = prompt(`Masukkan PIN Teknisi untuk menyelesaikan tiket ${noTiket}:`);
-  if (inputPin === null) return; // Batal
+  if (inputPin === null) return;
   if (inputPin !== PIN_TEKNISI) {
     alert("PIN salah! Hanya teknisi yang dapat mengubah status tiket.");
     return;
@@ -71,6 +71,8 @@ async function tandaiSelesai(noTiket, namaAlat) {
     if (result.status === "updated") {
       await kirimTelegram(`✅ *TIKET SELESAI DITANGANI*\n\nNo Tiket: *${noTiket}*\nAlat: *${namaAlat}*\nStatus: *SELESAI*`);
       muatTiket();
+    } else {
+      alert("Tiket tidak ditemukan di database.");
     }
   } catch (err) {
     alert("Gagal memperbarui status: " + err.message);
