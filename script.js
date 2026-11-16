@@ -108,7 +108,7 @@ async function muatTiket() {
       <div class="tiket-item">
         <div class="tiket-top">
           <span>${item.tiket} — ${item.alat}</span>
-          <span class="badge ${item.status === 'OPEN' ? 'badge-open' : 'badge-done'}">${item.status}</span>
+          <span class="badge ${item.status === 'OPEN' ? 'badge-open' : 'badge-done'}">${item.status === 'OPEN' ? 'BELUM SELESAI' : 'SELESAI'}</span>
         </div>
         <div class="tiket-meta">
           Pelapor: ${item.pelapor} | Urgensi: ${item.urgensi}<br>
