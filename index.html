@@ -9,47 +9,69 @@
 <body>
   <div class="container">
     <header>
-      <h1>Sistem Pelaporan Gangguan Alat</h1>
-      <p>Unit Instrumentasi & Operasional MKG</p>
+      <div class="brand-mark" aria-hidden="true">MKG</div>
+      <div class="header-copy">
+        <p class="eyebrow">PUSAT LAYANAN OPERASIONAL</p>
+        <h1>Sistem Pelaporan Gangguan Alat</h1>
+        <p>Unit Instrumentasi &amp; Operasional MKG</p>
+      </div>
     </header>
 
     <section class="card">
-      <h2>Buat Tiket Laporan Baru</h2>
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FORMULIR</p>
+          <h2>Buat Tiket Laporan Baru</h2>
+          <p class="section-description">Sampaikan kendala alat agar tim teknisi dapat segera menindaklanjuti.</p>
+        </div>
+        <span class="step-number" aria-hidden="true">01</span>
+      </div>
       <form id="formLaporan">
-        <label>Nama Pelapor / Observer</label>
-        <input type="text" id="pelapor" placeholder="Contoh: Budi (Dinas Pagi)" required>
+        <div class="field">
+          <label for="pelapor">Nama Pelapor / Observer</label>
+          <input type="text" id="pelapor" placeholder="Contoh: Budi (Dinas Pagi)" required>
+        </div>
 
-        <label>Peralatan Operasional</label>
-        <select id="alat" required>
-          <option value="">-- Pilih Peralatan --</option>
-          <option value="AWS Taman Alat">AWS Taman Alat</option>
-          <option value="AAWS / ARG">AAWS / Penakar Hujan Otomatis (ARG)</option>
-          <option value="Server & Jaringan Komunikasi">Server & Jaringan Komunikasi</option>
-          <option value="Radar / Seismograf">Radar Cuaca / Seismograf</option>
-          <option value="Catu Daya / UPS / Genset">Catu Daya / UPS / Genset</option>
-        </select>
+        <div class="field">
+          <label for="alat">Peralatan Operasional</label>
+          <select id="alat" required>
+            <option value="">-- Pilih Peralatan --</option>
+            <option value="AWS Taman Alat">AWS Taman Alat</option>
+            <option value="AAWS / ARG">AAWS / Penakar Hujan Otomatis (ARG)</option>
+            <option value="Server & Jaringan Komunikasi">Server & Jaringan Komunikasi</option>
+            <option value="Radar / Seismograf">Radar Cuaca / Seismograf</option>
+            <option value="Catu Daya / UPS / Genset">Catu Daya / UPS / Genset</option>
+          </select>
+        </div>
 
-        <label>Tingkat Urgensi</label>
-        <select id="urgensi" required>
-          <option value="Normal">Normal (Operasional masih berjalan)</option>
-          <option value="Tinggi">Tinggi (Data terhambat sebagian)</option>
-          <option value="Kritis">Kritis (Alat mati total / data terputus)</option>
-        </select>
+        <div class="field field-urgency">
+          <label for="urgensi">Tingkat Urgensi</label>
+          <select id="urgensi" required>
+            <option value="Normal">Normal (Operasional masih berjalan)</option>
+            <option value="Tinggi">Tinggi (Data terhambat sebagian)</option>
+            <option value="Kritis">Kritis (Alat mati total / data terputus)</option>
+          </select>
+        </div>
 
-        <label>Deskripsi Gejala / Kerusakan</label>
-        <textarea id="deskripsi" rows="3" placeholder="Jelaskan kondisi alat, indikator lampu, atau pesan error..." required></textarea>
+        <div class="field field-full">
+          <label for="deskripsi">Deskripsi Gejala / Kerusakan</label>
+          <textarea id="deskripsi" rows="4" placeholder="Jelaskan kondisi alat, indikator lampu, atau pesan error..." required></textarea>
+        </div>
 
-        <button type="submit" id="btnSubmit">Kirim Laporan Gangguan</button>
+        <button type="submit" id="btnSubmit" class="btn-submit">Kirim Laporan Gangguan <span aria-hidden="true">→</span></button>
       </form>
       <div id="notifikasi" class="hidden"></div>
     </section>
 
-    <section class="card">
+    <section class="card history-card">
       <div class="header-list">
-        <h2>Riwayat & Status Tiket Terkini</h2>
-        <button onclick="muatTiket()" class="btn-refresh">Refresh Data</button>
+        <div>
+          <p class="eyebrow">PEMANTAUAN</p>
+          <h2>Riwayat &amp; Status Tiket</h2>
+        </div>
+        <button type="button" onclick="muatTiket()" class="btn-refresh"><span aria-hidden="true">↻</span> Refresh</button>
       </div>
-      <div id="daftarTiket">Memuat data laporan...</div>
+      <div id="daftarTiket" aria-live="polite">Memuat data laporan...</div>
     </section>
   </div>
 
