@@ -3,77 +3,104 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Helpdesk & Pelaporan Gangguan Alat MKG</title>
+  <meta name="theme-color" content="#123451">
+  <meta name="description" content="Pusat pelaporan dan pemantauan gangguan peralatan operasional MKG.">
+  <title>Helpdesk MKG | Pelaporan Gangguan Alat</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="brand-mark" aria-hidden="true">MKG</div>
-      <div class="header-copy">
-        <p class="eyebrow">PUSAT LAYANAN OPERASIONAL</p>
-        <h1>Sistem Pelaporan Gangguan Alat</h1>
-        <p>Unit Instrumentasi &amp; Operasional MKG</p>
+  <main class="container">
+    <header class="site-header">
+      <a class="brand" href="#beranda" aria-label="Helpdesk MKG, beranda">
+        <span class="brand-mark" aria-hidden="true">MKG</span>
+        <span class="brand-name">HELPDESK <strong>MKG</strong></span>
+      </a>
+      <div class="header-context">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>Layanan operasional</span>
       </div>
     </header>
 
-    <section class="card">
+    <section class="intro" id="beranda" aria-labelledby="page-title">
+      <div class="intro-copy">
+        <p class="eyebrow">UNIT INSTRUMENTASI &amp; OPERASIONAL</p>
+        <h1 id="page-title">Pelaporan Gangguan<br class="desktop-break"> Peralatan MKG</h1>
+        <p class="intro-description">Laporkan kendala peralatan agar tim teknisi dapat melakukan pemeriksaan dan tindak lanjut dengan cepat.</p>
+      </div>
+      <div class="intro-art" aria-hidden="true">
+        <span class="orbit orbit-one"></span>
+        <span class="orbit orbit-two"></span>
+        <span class="signal-icon">↗</span>
+      </div>
+    </section>
+
+    <section class="card report-card" aria-labelledby="form-title">
       <div class="section-heading">
+        <div class="heading-icon" aria-hidden="true">＋</div>
         <div>
-          <p class="eyebrow">FORMULIR</p>
-          <h2>Buat Tiket Laporan Baru</h2>
-          <p class="section-description">Sampaikan kendala alat agar tim teknisi dapat segera menindaklanjuti.</p>
+          <p class="eyebrow">FORMULIR LAPORAN</p>
+          <h2 id="form-title">Buat tiket baru</h2>
+          <p class="section-description">Lengkapi informasi berikut untuk membuat laporan gangguan.</p>
         </div>
         <span class="step-number" aria-hidden="true">01</span>
       </div>
+
       <form id="formLaporan">
         <div class="field">
-          <label for="pelapor">Nama Pelapor / Observer</label>
-          <input type="text" id="pelapor" placeholder="Contoh: Budi (Dinas Pagi)" required>
+          <label for="pelapor">Nama pelapor <span class="required-mark">*</span></label>
+          <input type="text" id="pelapor" name="pelapor" autocomplete="name" placeholder="Contoh: Budi (Dinas Pagi)" required>
         </div>
 
         <div class="field">
-          <label for="alat">Peralatan Operasional</label>
-          <select id="alat" required>
-            <option value="">-- Pilih Peralatan --</option>
+          <label for="alat">Peralatan operasional <span class="required-mark">*</span></label>
+          <select id="alat" name="alat" required>
+            <option value="">Pilih peralatan</option>
             <option value="AWS Taman Alat">AWS Taman Alat</option>
             <option value="AAWS / ARG">AAWS / Penakar Hujan Otomatis (ARG)</option>
-            <option value="Server & Jaringan Komunikasi">Server & Jaringan Komunikasi</option>
+            <option value="Server & Jaringan Komunikasi">Server &amp; Jaringan Komunikasi</option>
             <option value="Radar / Seismograf">Radar Cuaca / Seismograf</option>
             <option value="Catu Daya / UPS / Genset">Catu Daya / UPS / Genset</option>
           </select>
         </div>
 
         <div class="field field-urgency">
-          <label for="urgensi">Tingkat Urgensi</label>
-          <select id="urgensi" required>
-            <option value="Normal">Normal (Operasional masih berjalan)</option>
-            <option value="Tinggi">Tinggi (Data terhambat sebagian)</option>
-            <option value="Kritis">Kritis (Alat mati total / data terputus)</option>
+          <label for="urgensi">Tingkat urgensi <span class="required-mark">*</span></label>
+          <select id="urgensi" name="urgensi" required>
+            <option value="Normal">Normal — operasional masih berjalan</option>
+            <option value="Tinggi">Tinggi — sebagian data terhambat</option>
+            <option value="Kritis">Kritis — alat mati atau data terputus</option>
           </select>
+          <p class="field-hint">Pilih urgensi berdasarkan dampak gangguan terhadap operasional.</p>
         </div>
 
         <div class="field field-full">
-          <label for="deskripsi">Deskripsi Gejala / Kerusakan</label>
-          <textarea id="deskripsi" rows="4" placeholder="Jelaskan kondisi alat, indikator lampu, atau pesan error..." required></textarea>
+          <label for="deskripsi">Deskripsi gejala atau kerusakan <span class="required-mark">*</span></label>
+          <textarea id="deskripsi" name="deskripsi" rows="4" placeholder="Jelaskan kondisi alat, indikator lampu, waktu kejadian, atau pesan error..." required></textarea>
         </div>
 
-        <button type="submit" id="btnSubmit" class="btn-submit">Kirim Laporan Gangguan <span aria-hidden="true">→</span></button>
+        <button type="submit" id="btnSubmit" class="btn-submit">Kirim laporan gangguan <span aria-hidden="true">→</span></button>
+        <p class="form-note"><span aria-hidden="true">🔒</span> Informasi laporan digunakan untuk keperluan tindak lanjut teknisi.</p>
       </form>
-      <div id="notifikasi" class="hidden"></div>
+      <div id="notifikasi" class="hidden" role="status" aria-live="polite"></div>
     </section>
 
-    <section class="card history-card">
+    <section class="card history-card" aria-labelledby="history-title">
       <div class="header-list">
-        <div>
+        <div class="history-title-wrap">
           <p class="eyebrow">PEMANTAUAN</p>
-          <h2>Riwayat &amp; Status Tiket</h2>
+          <h2 id="history-title">Riwayat &amp; status tiket</h2>
+          <p class="section-description">Pantau perkembangan laporan yang telah masuk.</p>
         </div>
-        <button type="button" onclick="muatTiket()" class="btn-refresh"><span aria-hidden="true">↻</span> Refresh</button>
+        <button type="button" onclick="muatTiket()" class="btn-refresh"><span aria-hidden="true">↻</span> Perbarui</button>
       </div>
       <div id="daftarTiket" aria-live="polite">Memuat data laporan...</div>
     </section>
-  </div>
+
+    <footer class="site-footer">
+      <span>Helpdesk Peralatan MKG</span>
+      <span>Unit Instrumentasi &amp; Operasional</span>
+    </footer>
+  </main>
 
   <script src="script.js"></script>
 </body>
