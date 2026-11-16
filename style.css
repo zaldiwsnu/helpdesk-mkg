@@ -625,6 +625,36 @@ button:disabled {
   color: #bf5b48;
 }
 
+.optional-mark {
+  color: #8795a2;
+  font-size: 0.76rem;
+  font-weight: 450;
+}
+
+input[type="file"] {
+  min-height: 48px;
+  padding: 6px;
+  color: #718196;
+  font-size: 0.8rem;
+}
+
+input[type="file"]::file-selector-button {
+  min-height: 34px;
+  margin-right: 11px;
+  padding: 7px 12px;
+  border: 1px solid #d9e5eb;
+  border-radius: 7px;
+  background: #f1f7f9;
+  color: #315a70;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: #e8f2f5;
+}
+
 .field-hint {
   margin: 6px 0 0;
   color: #8795a2;

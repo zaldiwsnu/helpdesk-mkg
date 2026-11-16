@@ -78,6 +78,12 @@
           <textarea id="deskripsi" name="deskripsi" rows="4" placeholder="Jelaskan kondisi alat, indikator lampu, waktu kejadian, atau pesan error..." required></textarea>
         </div>
 
+        <div class="field field-full">
+          <label for="foto">Foto kondisi alat <span class="optional-mark">(opsional)</span></label>
+          <input type="file" id="foto" name="foto" accept="image/*" capture="environment">
+          <p class="field-hint">Ambil foto menggunakan kamera ponsel atau pilih gambar dari galeri.</p>
+        </div>
+
         <button type="submit" id="btnSubmit" class="btn-submit">Kirim laporan gangguan <span aria-hidden="true">→</span></button>
         <p class="form-note"><span aria-hidden="true">🔒</span> Informasi laporan digunakan untuk keperluan tindak lanjut teknisi.</p>
       </form>
