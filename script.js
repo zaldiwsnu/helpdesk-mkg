@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDI81CmN2pDIu4yJMWfs3BpRH9bS4YUTC3vHKQsLHr10_19HfjmAV5_7e6QqYiMZU/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylulehe73wBcoqGLuSxiR7OdLAn8JCE7PAOJpjWlHgQbsZhiEiZEt3SKmtXO_GIP4/exec";
 
 // Konfigurasi Bot Telegram & PIN Teknisi
 const TELEGRAM_BOT_TOKEN = "8895071679:AAHCntKQ8EOd04nRgXyty7PLyKurZtCnBJs"; 
