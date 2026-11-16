@@ -1,46 +1,76 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxma_ZJhWqxEuDsrVUZ3tcQKRYnDOU-PWcw5P1zM2BfRnQ45b2t2BqSvzOWGQ7dRE/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxv0u3E8WrUdXvbQR0oWBweYAxTlw9suasXUP3AXbQVOBipK3yaOe3NrDmkGn6CBV8/exec";
 
-// Konfigurasi Bot Telegram & PIN Teknisi
-const TELEGRAM_BOT_TOKEN = "8895071679:AAHCntKQ8EOd04nRgXyty7PLyKurZtCnBJs";
-const TELEGRAM_CHAT_ID = "8350319262";
+// PIN Teknisi
 const PIN_TEKNISI = "1234";
 
 const form = document.getElementById("formLaporan");
 const btnSubmit = document.getElementById("btnSubmit");
 const notif = document.getElementById("notifikasi");
 
+// Fungsi kompresi foto di browser sebelum dikirim
+function kompresGambar(file, maxWidth = 800, quality = 0.7) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
+}
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   btnSubmit.disabled = true;
-  btnSubmit.textContent = "Mengirim laporan...";
-
-  const payload = {
-    pelapor: document.getElementById("pelapor").value,
-    alat: document.getElementById("alat").value,
-    urgensi: document.getElementById("urgensi").value,
-    deskripsi: document.getElementById("deskripsi").value
-  };
+  btnSubmit.textContent = "Mengirim laporan & foto...";
 
   try {
+    let fotoBase64 = "";
+    const fileInput = document.getElementById("foto");
+    if (fileInput?.files.length) {
+      fotoBase64 = await kompresGambar(fileInput.files[0]);
+    }
+
+    const payload = {
+      pelapor: document.getElementById("pelapor").value,
+      alat: document.getElementById("alat").value,
+      urgensi: document.getElementById("urgensi").value,
+      deskripsi: document.getElementById("deskripsi").value,
+      fotoBase64
+    };
+
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
     });
     const result = await res.json();
-
-    if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
-      const pesan = `🚨 *LAPORAN GANGGUAN ALAT MKG*\n\n` +
-                    `No Tiket: *${result.tiket}*\n` +
-                    `Alat: *${payload.alat}*\n` +
-                    `Urgensi: *${payload.urgensi}*\n` +
-                    `Pelapor: ${payload.pelapor}\n` +
-                    `Kendala: ${payload.deskripsi}`;
-
-      await kirimTelegram(pesan);
+    if (!res.ok || result.status !== "success") {
+      throw new Error(result.message || "Laporan tidak berhasil disimpan.");
     }
 
-    notif.textContent = `Berhasil! Nomor Tiket Anda: ${result.tiket}. Notifikasi telah dikirim ke Telegram teknisi.`;
+    const fotoGagal = result.urlFoto?.startsWith("Gagal unggah foto:");
+    notif.textContent = fotoGagal
+      ? `Tiket ${result.tiket} tersimpan, tetapi foto gagal diunggah: ${result.urlFoto.replace("Gagal unggah foto:", "").trim()}`
+      : `Tiket ${result.tiket} berhasil disimpan${fotoBase64 ? " bersama foto" : ""}.`;
     notif.classList.remove("hidden");
     form.reset();
     muatTiket();
@@ -69,7 +99,6 @@ async function tandaiSelesai(noTiket, namaAlat) {
     const result = await res.json();
 
     if (result.status === "updated") {
-      await kirimTelegram(`✅ *TIKET SELESAI DITANGANI*\n\nNo Tiket: *${noTiket}*\nAlat: *${namaAlat}*\nStatus: *SELESAI*`);
       muatTiket();
     } else {
       alert("Tiket tidak ditemukan di database.");
@@ -77,19 +106,6 @@ async function tandaiSelesai(noTiket, namaAlat) {
   } catch (err) {
     alert("Gagal memperbarui status: " + err.message);
   }
-}
-
-async function kirimTelegram(pesan) {
-  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
-  await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: TELEGRAM_CHAT_ID,
-      text: pesan,
-      parse_mode: "Markdown"
-    })
-  });
 }
 
 async function muatTiket() {
@@ -115,6 +131,13 @@ async function muatTiket() {
           Lapor: ${item.waktu} ${item.status === 'SELESAI' ? `| Selesai: ${item.waktuSelesai}` : ''}
         </div>
         <div>${item.deskripsi}</div>
+        ${item.foto && item.foto.startsWith('http') ? `
+          <div style="margin-top: 8px;">
+            <a href="${item.foto}" target="_blank" style="font-size: 0.85rem; color: #0284c7; text-decoration: none; font-weight: 600;">
+              📷 Lihat Foto Bukti Kerusakan ↗
+            </a>
+          </div>
+        ` : ''}
         ${item.status === 'OPEN' ? `
           <button type="button" class="btn-selesai" onclick="tandaiSelesai('${item.tiket}', '${item.alat}')">
             ✓ Tandai Selesai
