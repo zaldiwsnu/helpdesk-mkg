@@ -6,6 +6,19 @@ const PIN_TEKNISI = "1234";
 const form = document.getElementById("formLaporan");
 const btnSubmit = document.getElementById("btnSubmit");
 const notif = document.getElementById("notifikasi");
+const alatSelect = document.getElementById("alat");
+const alatLainnyaField = document.getElementById("alatLainnyaField");
+const alatLainnyaInput = document.getElementById("alatLainnya");
+
+function perbaruiFieldAlatLainnya() {
+  const pilihLainnya = alatSelect.value === "Lainnya";
+  alatLainnyaField.classList.toggle("hidden", !pilihLainnya);
+  alatLainnyaInput.required = pilihLainnya;
+  if (!pilihLainnya) alatLainnyaInput.value = "";
+}
+
+alatSelect.addEventListener("change", perbaruiFieldAlatLainnya);
+perbaruiFieldAlatLainnya();
 
 // Fungsi kompresi foto di browser sebelum dikirim
 function kompresGambar(file, maxWidth = 800, quality = 0.7) {
@@ -51,7 +64,9 @@ form.addEventListener("submit", async (e) => {
 
     const payload = {
       pelapor: document.getElementById("pelapor").value,
-      alat: document.getElementById("alat").value,
+      alat: alatSelect.value === "Lainnya"
+        ? alatLainnyaInput.value.trim()
+        : alatSelect.value,
       urgensi: document.getElementById("urgensi").value,
       deskripsi: document.getElementById("deskripsi").value,
       fotoBase64
