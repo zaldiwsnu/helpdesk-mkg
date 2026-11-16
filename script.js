@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywIIcj4e3b4SHzbGdZipVTGH3YAIYrkGqSsaIpgKoHXyqTAaLHKbvsAjHlF2JEjd0/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDArVIzo8mhZfGORkaTk4WwxoNRepJZND98j-wbl2pm5katEiRQj7UA99VituY8EI/exec";
 
 // PIN Teknisi
 const PIN_TEKNISI = "1234";
