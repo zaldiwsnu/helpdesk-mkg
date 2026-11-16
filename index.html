@@ -97,7 +97,10 @@
           <h2 id="history-title">Riwayat &amp; status tiket</h2>
           <p class="section-description">Pantau perkembangan laporan yang telah masuk.</p>
         </div>
-        <button type="button" onclick="muatTiket()" class="btn-refresh"><span aria-hidden="true">↻</span> Perbarui</button>
+        <div class="history-actions">
+          <button type="button" onclick="unduhRekapBulanIni()" class="btn-report">Unduh Rekap Bulan Ini</button>
+          <button type="button" onclick="muatTiket()" class="btn-refresh"><span aria-hidden="true">↻</span> Perbarui</button>
+        </div>
       </div>
       <div id="daftarTiket" aria-live="polite">Memuat data laporan...</div>
     </section>

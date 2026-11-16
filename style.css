@@ -274,6 +274,27 @@ button:disabled {
   margin-bottom: 17px;
 }
 
+.history-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-report {
+  min-height: 38px;
+  padding: 8px 12px;
+  background: #176b91;
+  box-shadow: 0 4px 10px rgba(23, 107, 145, 0.12);
+  font-size: 0.8rem;
+}
+
+.btn-report:hover {
+  transform: translateY(-1px);
+  background: #145d80;
+  box-shadow: 0 6px 14px rgba(23, 107, 145, 0.19);
+}
+
 .btn-refresh {
   display: inline-flex;
   min-height: 38px;
@@ -420,6 +441,17 @@ button:disabled {
 
   .header-list {
     align-items: flex-start;
+  }
+
+  .history-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .btn-report {
+    min-height: 35px;
+    padding: 7px 9px;
+    font-size: 0.72rem;
   }
 
   .header-list h2 {
