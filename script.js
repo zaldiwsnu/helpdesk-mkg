@@ -1,8 +1,8 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDI81CmN2pDIu4yJMWfs3BpRH9bS4YUTC3vHKQsLHr10_19HfjmAV5_7e6QqYiMZU/exec";
 
-// Opsional: Isi jika ingin notifikasi otomatis masuk ke Telegram
-const TELEGRAM_BOT_TOKEN = ""; 
-const TELEGRAM_CHAT_ID = "";   
+// Konfigurasi Bot Telegram
+const TELEGRAM_BOT_TOKEN = "8895071679:AAHCntKQ8EOd04nRgXyty7PLyKurZtCnBJs"; 
+const TELEGRAM_CHAT_ID = "8350319262";   
 
 const form = document.getElementById("formLaporan");
 const btnSubmit = document.getElementById("btnSubmit");
@@ -31,12 +31,12 @@ form.addEventListener("submit", async (e) => {
     });
     const result = await res.json();
 
-    // 2. Kirim Notifikasi Telegram (jika token diisi)
+    // 2. Kirim Notifikasi Telegram
     if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
-      const pesan = `🚨 *LAPORAN GANGGUAN ALAT*\n` +
+      const pesan = `🚨 *LAPORAN GANGGUAN ALAT MKG*\n\n` +
                     `No Tiket: *${result.tiket}*\n` +
-                    `Alat: ${payload.alat}\n` +
-                    `Urgensi: ${payload.urgensi}\n` +
+                    `Alat: *${payload.alat}*\n` +
+                    `Urgensi: *${payload.urgensi}*\n` +
                     `Pelapor: ${payload.pelapor}\n` +
                     `Kendala: ${payload.deskripsi}`;
       
@@ -51,7 +51,7 @@ form.addEventListener("submit", async (e) => {
       });
     }
 
-    notif.textContent = `Berhasil! Nomor Tiket Anda: ${result.tiket}. Tim teknisi telah dinotifikasi.`;
+    notif.textContent = `Berhasil! Nomor Tiket Anda: ${result.tiket}. Notifikasi telah dikirim ke Telegram teknisi.`;
     notif.classList.remove("hidden");
     form.reset();
     muatTiket(); 
