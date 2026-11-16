@@ -1,8 +1,9 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDI81CmN2pDIu4yJMWfs3BpRH9bS4YUTC3vHKQsLHr10_19HfjmAV5_7e6QqYiMZU/exec";
+const SCRIPT_URL = "TEMPEL_URL_WEB_APP_BARU_ANDA_DI_SINI";
 
-// Konfigurasi Bot Telegram
+// Konfigurasi Bot Telegram & PIN Teknisi
 const TELEGRAM_BOT_TOKEN = "8895071679:AAHCntKQ8EOd04nRgXyty7PLyKurZtCnBJs"; 
 const TELEGRAM_CHAT_ID = "8350319262";   
+const PIN_TEKNISI = "1234"; // Ubah sesuai PIN yang Anda inginkan
 
 const form = document.getElementById("formLaporan");
 const btnSubmit = document.getElementById("btnSubmit");
@@ -21,17 +22,13 @@ form.addEventListener("submit", async (e) => {
   };
 
   try {
-    // 1. Simpan ke Google Sheets
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8"
-      },
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
     });
     const result = await res.json();
 
-    // 2. Kirim Notifikasi Telegram
     if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
       const pesan = `🚨 *LAPORAN GANGGUAN ALAT MKG*\n\n` +
                     `No Tiket: *${result.tiket}*\n` +
@@ -40,15 +37,7 @@ form.addEventListener("submit", async (e) => {
                     `Pelapor: ${payload.pelapor}\n` +
                     `Kendala: ${payload.deskripsi}`;
       
-      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: pesan,
-          parse_mode: "Markdown"
-        })
-      });
+      await kirimTelegram(pesan);
     }
 
     notif.textContent = `Berhasil! Nomor Tiket Anda: ${result.tiket}. Notifikasi telah dikirim ke Telegram teknisi.`;
@@ -62,6 +51,44 @@ form.addEventListener("submit", async (e) => {
     btnSubmit.textContent = "Kirim Laporan Gangguan";
   }
 });
+
+async function tandaiSelesai(noTiket, namaAlat) {
+  const inputPin = prompt(`Masukkan PIN Teknisi untuk menyelesaikan tiket ${noTiket}:`);
+  if (inputPin === null) return; // Batal
+  if (inputPin !== PIN_TEKNISI) {
+    alert("PIN salah! Hanya teknisi yang dapat mengubah status tiket.");
+    return;
+  }
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "selesai", tiket: noTiket })
+    });
+    const result = await res.json();
+
+    if (result.status === "updated") {
+      await kirimTelegram(`✅ *TIKET SELESAI DITANGANI*\n\nNo Tiket: *${noTiket}*\nAlat: *${namaAlat}*\nStatus: *SELESAI*`);
+      muatTiket();
+    }
+  } catch (err) {
+    alert("Gagal memperbarui status: " + err.message);
+  }
+}
+
+async function kirimTelegram(pesan) {
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
+  await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: pesan,
+      parse_mode: "Markdown"
+    })
+  });
+}
 
 async function muatTiket() {
   const container = document.getElementById("daftarTiket");
@@ -81,8 +108,16 @@ async function muatTiket() {
           <span>${item.tiket} — ${item.alat}</span>
           <span class="badge ${item.status === 'OPEN' ? 'badge-open' : 'badge-done'}">${item.status}</span>
         </div>
-        <div class="tiket-meta">Pelapor: ${item.pelapor} | Urgensi: ${item.urgensi} | ${item.waktu}</div>
+        <div class="tiket-meta">
+          Pelapor: ${item.pelapor} | Urgensi: ${item.urgensi}<br>
+          Lapor: ${item.waktu} ${item.status === 'SELESAI' ? `| Selesai: ${item.waktuSelesai}` : ''}
+        </div>
         <div>${item.deskripsi}</div>
+        ${item.status === 'OPEN' ? `
+          <button type="button" class="btn-selesai" onclick="tandaiSelesai('${item.tiket}', '${item.alat}')">
+            ✓ Tandai Selesai
+          </button>
+        ` : ''}
       </div>
     `).join("");
   } catch (err) {
